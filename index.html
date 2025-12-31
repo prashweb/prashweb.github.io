@@ -2,205 +2,207 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2416926295722953" crossorigin="anonymous"></script>
+    <title>Interactive Least Squares Visualization</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        h1 { margin-bottom: 10px; }
+        .container {
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        canvas {
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+        .stats {
+            margin-top: 15px;
+            font-family: monospace;
+            background: #eee;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        p { max-width: 600px; text-align: center; color: #666; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="curser"></div>
-        <div class="row">
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div> 
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-        </div>
-        <div class="row">
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div> 
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-        </div>
-        <div class="row">
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div> 
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-        </div>
-        <div class="row">
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div> 
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-        </div>
-        <div class="row">
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div> 
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-        </div>
-        <div class="row">
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div> 
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-        </div>
-        <div class="row">
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div> 
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-        </div>
-        <div class="row">
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div> 
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-        </div>
-        <div class="row">
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div> 
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-        </div>
-        <div class="row">
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>  
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-            <div class="hexagon"></div>
-        </div>
-    </div>
-    <script>
-        var curser = document.querySelector(".curser");
-        document.addEventListener('mousemove', function(e){
-            var X = e.clientX;
-            var Y = e.clientY;
 
-            curser.style.left = X + "px";
-            curser.style.top = Y + "px";
-        })
+    <h1>Least Squares Regression</h1>
+    <p>Drag any of the <strong>10 blue points</strong> to move them. The red regression line will update instantly to minimize the squared error.</p>
+    
+    <div class="container">
+        <canvas id="plotCanvas" width="600" height="400"></canvas>
+    </div>
+
+    <div class="stats" id="statsOutput">
+        Equation: y = 0.00x + 0.00
+    </div>
+
+    <script>
+        const canvas = document.getElementById('plotCanvas');
+        const ctx = canvas.getContext('2d');
+        const statsOutput = document.getElementById('statsOutput');
+
+        // Configuration
+        const pointRadius = 8;
+        const width = canvas.width;
+        const height = canvas.height;
+        const padding = 40; // Padding for axes
+
+        // 1. Initialize 10 random points
+        // We store data in "canvas coordinates" for simplicity, 
+        // but math usually requires mapping to cartesian.
+        let points = [];
+        for (let i = 0; i < 10; i++) {
+            points.push({
+                x: padding + (Math.random() * (width - 2 * padding)),
+                y: padding + (Math.random() * (height - 2 * padding))
+            });
+        }
+
+        // Interaction State
+        let isDragging = false;
+        let dragIndex = -1;
+
+        // 2. Math: Calculate Least Squares (Linear Regression)
+        function calculateLeastSquares(pts) {
+            let n = pts.length;
+            let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+
+            for (let p of pts) {
+                // Invert Y for calculation because canvas (0,0) is top-left
+                let cartesianY = height - p.y; 
+                
+                sumX += p.x;
+                sumY += cartesianY;
+                sumXY += p.x * cartesianY;
+                sumXX += p.x * p.x;
+            }
+
+            let slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+            let intercept = (sumY - slope * sumX) / n;
+
+            return { m: slope, c: intercept };
+        }
+
+        // 3. Rendering
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+
+            // Draw Grid/Axes
+            ctx.strokeStyle = '#eee';
+            ctx.lineWidth = 1;
+            // (Simple grid logic omitted for brevity, just drawing border)
+            
+            // Calculate Line
+            const { m, c } = calculateLeastSquares(points);
+
+            // Draw Regression Line
+            // y = mx + c -> We need two points at the edges of the canvas
+            let x1 = 0;
+            let y1_cartesian = m * x1 + c;
+            let y1 = height - y1_cartesian; // Convert back to canvas coords
+
+            let x2 = width;
+            let y2_cartesian = m * x2 + c;
+            let y2 = height - y2_cartesian;
+
+            ctx.beginPath();
+            ctx.strokeStyle = '#ff4757'; // Red line
+            ctx.lineWidth = 3;
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+
+            // Draw Points
+            points.forEach(p => {
+                ctx.beginPath();
+                ctx.fillStyle = '#3742fa'; // Blue points
+                ctx.arc(p.x, p.y, pointRadius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            });
+
+            // Draw Residuals (Optional visual flair: lines from point to line)
+            ctx.strokeStyle = '#ccc';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5, 5]);
+            points.forEach(p => {
+                let lineY_cartesian = m * p.x + c;
+                let lineY = height - lineY_cartesian;
+                
+                ctx.beginPath();
+                ctx.moveTo(p.x, p.y);
+                ctx.lineTo(p.x, lineY);
+                ctx.stroke();
+            });
+            ctx.setLineDash([]);
+
+            // Update Text Stats
+            // Note: Coordinate system is pixels here, so numbers are large.
+            // In a real app, you'd map these to small units (e.g. 0 to 10).
+            statsOutput.innerText = `Line: y = ${(-m).toFixed(2)}x + ${c.toFixed(2)}`;
+        }
+
+        // 4. Interaction Logic
+        function getMousePos(evt) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: evt.clientX - rect.left,
+                y: evt.clientY - rect.top
+            };
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            const mouse = getMousePos(e);
+            // Check if we clicked a point
+            points.forEach((p, index) => {
+                const dist = Math.hypot(mouse.x - p.x, mouse.y - p.y);
+                if (dist < pointRadius + 5) { // +5 for easier clicking
+                    isDragging = true;
+                    dragIndex = index;
+                }
+            });
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const mouse = getMousePos(e);
+                // Update point position
+                points[dragIndex].x = mouse.x;
+                points[dragIndex].y = mouse.y;
+                draw(); // Redraw immediately
+            } else {
+                // Optional: Change cursor if hovering over a point
+                const mouse = getMousePos(e);
+                let hovering = false;
+                points.forEach(p => {
+                    if (Math.hypot(mouse.x - p.x, mouse.y - p.y) < pointRadius + 5) hovering = true;
+                });
+                canvas.style.cursor = hovering ? 'move' : 'default';
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+            dragIndex = -1;
+        });
+
+        // Initial draw
+        draw();
+
     </script>
 </body>
 </html>
