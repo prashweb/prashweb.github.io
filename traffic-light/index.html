@@ -7,18 +7,40 @@
 </head>
 <body>
     <h1>Epsilon-Greedy Traffic Light</h1>
-    <p>The agent learns to switch lights to minimize waiting cars.</p>
+    <p class="subtitle">Balancing exploration (trying new things) vs. exploitation (using what works).</p>
 
-    <div class="controls">
-        <label>Exploration (Epsilon): 
-            <input type="range" id="epsilonSlider" min="0" max="1" step="0.1" value="0.2">
-            <span id="epsValue">0.2</span>
-        </label>
-        <button onclick="toggleSim()">Play/Pause</button>
-        <div class="stat-box">Total Cars Passed: <span id="score">0</span></div>
+    <div class="layout-wrapper">
+        <div class="visual-col">
+            <div class="controls">
+                <label>Exploration (&epsilon;): 
+                    <input type="range" id="epsilonSlider" min="0" max="1" step="0.1" value="0.2">
+                    <span id="epsValue">0.2</span>
+                </label>
+                <button onclick="toggleSim()">Play/Pause</button>
+                <div class="stat-box">Cars Passed: <span id="score">0</span></div>
+            </div>
+            <canvas id="simCanvas" width="600" height="300"></canvas>
+        </div>
+
+        <div class="text-col">
+            <h3>The Exploration Dilemma</h3>
+            <p>
+                In this simulation, an RL agent controls the traffic lights. Its goal is to maximize the flow of traffic (total cars passed). It uses <strong>Q-Learning</strong> to remember which action (Green North-South vs. Green East-West) is best for a given situation (e.g., "Heavy traffic on East-West").
+            </p>
+            <p>
+                <strong>What is Epsilon?</strong><br>
+                The slider controls $\epsilon$ (Epsilon), which represents the "Exploration Rate." 
+                <br>
+                If <strong>$\epsilon = 0.0$ (Greedy)</strong>, the agent always picks the action it <em>thinks</em> is best. However, if it learns the wrong thing early on (e.g., "North-South green is always bad"), it will never try it again to correct itself.
+                <br>
+                If <strong>$\epsilon = 1.0$ (Random)</strong>, the agent acts chaotically, never using its knowledge.
+            </p>
+            <p>
+                <strong>The ITS Connection:</strong><br>
+                In real-world Adaptive Traffic Signal Control (ATSC), we cannot afford high exploration because it causes jams. Typically, we train in simulation (high epsilon) and deploy with low epsilon (0.05 or 0.1) to handle slight changes in traffic patterns without causing chaos.
+            </p>
+        </div>
     </div>
-
-    <canvas id="simCanvas" width="600" height="300"></canvas>
 
     <script src="script.js"></script>
 </body>
