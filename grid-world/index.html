@@ -1,1 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RL: Value Iteration</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <h1>Grid World: Value Iteration</h1>
+    <p>Click "Iterate" to propagate values (Green = Good, Red = Bad).</p>
+    
+    <div class="controls">
+        <button onclick="step()">Step (1 Iteration)</button>
+        <button onclick="resetGrid()">Reset</button>
+        <div class="stat-box">Gamma (Discount): <span id="gammaVal">0.9</span></div>
+    </div>
 
+    <canvas id="gridCanvas" width="500" height="500"></canvas>
+
+    <script src="script.js"></script>
+</body>
+</html>
