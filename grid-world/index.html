@@ -7,15 +7,32 @@
 </head>
 <body>
     <h1>Grid World: Value Iteration</h1>
-    <p>Click "Iterate" to propagate values (Green = Good, Red = Bad).</p>
+    <p class="subtitle">Visualizing how long-term rewards propagate through an environment.</p>
     
-    <div class="controls">
-        <button onclick="step()">Step (1 Iteration)</button>
-        <button onclick="resetGrid()">Reset</button>
-        <div class="stat-box">Gamma (Discount): <span id="gammaVal">0.9</span></div>
-    </div>
+    <div class="layout-wrapper">
+        <div class="visual-col">
+            <div class="controls">
+                <button onclick="step()">Step (1 Iteration)</button>
+                <button onclick="resetGrid()">Reset</button>
+                <div class="stat-box">Gamma: <span id="gammaVal">0.9</span></div>
+            </div>
+            <canvas id="gridCanvas" width="500" height="500"></canvas>
+        </div>
 
-    <canvas id="gridCanvas" width="500" height="500"></canvas>
+        <div class="text-col">
+            <h3>What is happening here?</h3>
+            <p>
+                This grid demonstrates <strong>Value Iteration</strong>, a core dynamic programming algorithm. The goal is to calculate the "Value" of every square (state). The value represents <em>"how much future reward can I expect if I start here?"</em>
+            </p>
+            <p>
+                Initially, the agent only knows that the <strong>Diamond</strong> gives +10 points and the <strong>Fire</strong> gives -10. All other white squares have a value of 0. When you click <strong>"Step"</strong>, the values "leak" into neighboring cells. This follows the Bellman Equation: a cell's value is updated based on the maximum value of its neighbors.
+            </p>
+            <p>
+                <strong>Why does the green fade?</strong><br>
+                Notice that the green color gets paler the further you are from the diamond. This is due to the <strong>Discount Factor (Gamma = 0.9)</strong>. A reward of 10 today is worth more than a reward of 10 tomorrow. If you are 5 steps away from the diamond, the value is roughly $10 \times 0.9^5$, which is why the color fades.
+            </p>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
