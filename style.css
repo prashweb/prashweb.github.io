@@ -1,65 +1,28 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-body{
-    background: black;
-    overflow: hidden;
-    min-height: 100vh;
-    cursor: none;
-}
-.container{
-    position: relative;
-    height: 100vh;
-    overflow: hidden;
-}
-.row{
-    display: inline-flex;
-    margin-top: -32px;
-    margin-left: -50px;
-}
-.hexagon{
-    position: relative;
-    width: 100px;
-    height: 110px;
-    margin: 1px;
-    transition: 2s;
-    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    background: linear-gradient(90deg, rgba(18, 17, 19, 1) 50%, rgba(0,0,0,1) 50%);
-}
-.hexagon:hover{
-    transition: 0s;
-}
-.row:nth-child(even){
-    margin-left: 1px;
-}
-.curser{
-    position: absolute;
-    width: 800px;
-    height: 800px;
-    border-radius: 50%;
-    animation: anim 2s linear infinite;
-    visibility: hidden;
-    transition: .1s;
-    transform: translate(-50%, -50%);
-}
-@keyframes anim{
-    0%{
-        filter: hue-rotate(0deg);
-    }
-    100%{
-        filter: hue-rotate(360deg);
-    }
-}
-body:hover .curser{
-    background: radial-gradient(circle, rgba(0,255, 0,1) 23%  , rgba(0,0,0,.1) 100%);
-    visibility: visible;
-}
-/*
-  60 orange
-  120 green
-  210
-  260
-  30
-*/
+body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        h1 { margin-bottom: 10px; }
+        .container {
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        canvas {
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+        .stats {
+            margin-top: 15px;
+            font-family: monospace;
+            background: #eee;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        p { max-width: 600px; text-align: center; color: #666; }
