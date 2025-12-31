@@ -6,19 +6,42 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <h1>Reward Engineering: The Parking Problem</h1>
-    <p>Select a reward function to see how it changes the agent's behavior.</p>
+    <h1>Reward Engineering</h1>
+    <p class="subtitle">The hardest part of RL is telling the agent what you actually want.</p>
 
-    <div class="controls">
-        <form id="rewardForm">
-            <label><input type="radio" name="reward" value="sparse" checked> <strong>Sparse:</strong> +100 only at goal (Hard)</label><br>
-            <label><input type="radio" name="reward" value="dense"> <strong>Dense:</strong> +1 for getting closer (Easy)</label><br>
-            <label><input type="radio" name="reward" value="bad"> <strong>Bad:</strong> +1 for every move (Infinite Loop)</label>
-        </form>
-        <button onclick="resetGrid()">Reset</button>
+    <div class="layout-wrapper">
+        <div class="visual-col">
+            <div class="controls">
+                <form id="rewardForm">
+                    <label><input type="radio" name="reward" value="sparse" checked> <strong>Sparse</strong> (+100 at Goal)</label><br>
+                    <label><input type="radio" name="reward" value="dense"> <strong>Dense</strong> (Distance Based)</label><br>
+                    <label><input type="radio" name="reward" value="bad"> <strong>Bad</strong> (+1 for Moving)</label>
+                </form>
+                <button onclick="resetGrid()">Reset</button>
+            </div>
+            <canvas id="parkCanvas" width="400" height="400"></canvas>
+        </div>
+
+        <div class="text-col">
+            <h3>Defining the Goal</h3>
+            <p>
+                Reinforcement Learning agents are lazy; they will exploit any loophole in your reward function. Here, we try to teach a car (blue) to park in a spot (green).
+            </p>
+            <p>
+                <strong>1. Sparse Reward (Hard):</strong><br>
+                We only give a reward when the car hits the spot exactly. Until then, the agent gets nothing. It wanders blindly (random walk) and learns very slowly. This is realistic but difficult to solve.
+            </p>
+            <p>
+                <strong>2. Dense Reward (Easy):</strong><br>
+                We give the agent a small reward every time it gets <em>closer</em> to the goal (Reward Shaping). This acts like a trail of breadcrumbs. The agent learns extremely fast because it gets immediate feedback on every step.
+            </p>
+            <p>
+                <strong>3. Bad Reward (Loophole):</strong><br>
+                We naively give the agent +1 for "moving around." The agent quickly realizes it doesn't need to park to get points; it just drives in circles forever. This is a common bug in RL known as "Reward Hacking."
+            </p>
+        </div>
     </div>
 
-    <canvas id="parkCanvas" width="400" height="400"></canvas>
     <script src="script.js"></script>
 </body>
 </html>
