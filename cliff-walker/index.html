@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RL: Cliff Walker</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <h1>Cliff Walker: Risk vs. Reward</h1>
+    <p><strong>Q-Learning</strong> hugs the cliff (optimal but risky). <strong>SARSA</strong> takes the safe route.</p>
+
+    <div class="controls">
+        <label>Algorithm:
+            <select id="algoSelect">
+                <option value="qlearning">Q-Learning (Bold)</option>
+                <option value="sarsa">SARSA (Safe)</option>
+            </select>
+        </label>
+        <button onclick="resetSim()">Reset & Run</button>
+        <div class="stat-box">Episodes: <span id="episodes">0</span></div>
+    </div>
+
+    <canvas id="cliffCanvas" width="600" height="250"></canvas>
+
+    <script src="script.js"></script>
+</body>
+</html>
