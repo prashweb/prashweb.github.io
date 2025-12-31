@@ -3,65 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Least Squares Visualization</title>
+    <title>Least Squares with Live Math</title>
     <style>
-        body {
-            font-family: sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #f4f4f9;
-            color: #333;
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; background-color: #f8f9fa; color: #333; }
+        .container { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; max-width: 1200px; }
+        .canvas-box { background: white; padding: 10px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        canvas { border: 1px solid #ddd; cursor: crosshair; }
+        
+        /* Calculation Box Styling */
+        .math-box { 
+            background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+            min-width: 300px; font-family: 'Courier New', monospace; font-size: 14px;
         }
-        h1 { margin-bottom: 10px; }
-        .container {
-            position: relative;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            background: white;
-            padding: 10px;
-            border-radius: 8px;
-        }
-        canvas {
-            border: 1px solid #ddd;
-            cursor: pointer;
-        }
-        .stats {
-            margin-top: 15px;
-            font-family: monospace;
-            background: #eee;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        p { max-width: 600px; text-align: center; color: #666; }
+        .math-row { margin-bottom: 8px; border-bottom: 1px dashed #eee; padding-bottom: 4px; }
+        .highlight { color: #d63031; font-weight: bold; }
+        h3 { margin-top: 0; color: #2d3436; }
+        .sub-text { color: #636e72; font-size: 0.9em; }
     </style>
 </head>
 <body>
 
-    <h1>Least Squares Regression</h1>
-    <p>Drag any of the <strong>10 blue points</strong> to move them. The red regression line will update instantly to minimize the squared error.</p>
-    
-    <div class="container">
-        <canvas id="plotCanvas" width="600" height="400"></canvas>
-    </div>
+    <h2>Interactive Least Squares</h2>
+    <p>Drag points to see how the sums and slope change instantly.</p>
 
-    <div class="stats" id="statsOutput">
-        Equation: y = 0.00x + 0.00
+    <div class="container">
+        <div class="canvas-box">
+            <canvas id="plotCanvas" width="500" height="400"></canvas>
+        </div>
+        
+        <div class="math-box" id="calcPanel">
+            <h3>Live Calculations</h3>
+            <div id="sumsOutput"></div>
+            <br>
+            <h3>Slope (m)</h3>
+            <div id="slopeFormula"></div>
+            <br>
+            <h3>Intercept (c)</h3>
+            <div id="interceptFormula"></div>
+        </div>
     </div>
 
     <script>
         const canvas = document.getElementById('plotCanvas');
         const ctx = canvas.getContext('2d');
-        const statsOutput = document.getElementById('statsOutput');
+        const sumsOutput = document.getElementById('sumsOutput');
+        const slopeFormula = document.getElementById('slopeFormula');
+        const interceptFormula = document.getElementById('interceptFormula');
 
-        // Configuration
-        const pointRadius = 8;
         const width = canvas.width;
         const height = canvas.height;
-        const padding = 40; // Padding for axes
+        const padding = 40;
 
-        // 1. Initialize 10 random points
-        // We store data in "canvas coordinates" for simplicity, 
-        // but math usually requires mapping to cartesian.
+        // Initialize points
         let points = [];
         for (let i = 0; i < 10; i++) {
             points.push({
@@ -70,109 +63,109 @@
             });
         }
 
-        // Interaction State
         let isDragging = false;
         let dragIndex = -1;
 
-        // 2. Math: Calculate Least Squares (Linear Regression)
-        function calculateLeastSquares(pts) {
-            let n = pts.length;
-            let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
-
-            for (let p of pts) {
-                // Invert Y for calculation because canvas (0,0) is top-left
-                let cartesianY = height - p.y; 
-                
-                sumX += p.x;
-                sumY += cartesianY;
-                sumXY += p.x * cartesianY;
-                sumXX += p.x * p.x;
-            }
-
-            let slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-            let intercept = (sumY - slope * sumX) / n;
-
-            return { m: slope, c: intercept };
+        // Scale down large pixel values to small graph units (0-10) for readability
+        function toGraphUnits(val, isY = false) {
+            // Map 0-500px to 0-10 units
+            const scale = 10 / width; 
+            if (isY) return ((height - val) * scale).toFixed(2);
+            return (val * scale).toFixed(2);
         }
 
-        // 3. Rendering
-        function draw() {
+        function calculateAndDraw() {
+            let n = points.length;
+            let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+
+            // 1. Calculate Sums (using scaled units 0-10)
+            for (let p of points) {
+                let gx = parseFloat(toGraphUnits(p.x));
+                let gy = parseFloat(toGraphUnits(p.y, true));
+                
+                sumX += gx;
+                sumY += gy;
+                sumXY += gx * gy;
+                sumXX += gx * gx;
+            }
+
+            // 2. Calculate Slope/Intercept
+            let numerator = (n * sumXY) - (sumX * sumY);
+            let denominator = (n * sumXX) - (sumX * sumX);
+            let m = denominator === 0 ? 0 : numerator / denominator;
+            let c = (sumY - m * sumX) / n;
+
+            // 3. Update HTML Calculation Panel
+            sumsOutput.innerHTML = `
+                <div class="math-row">N (points) = ${n}</div>
+                <div class="math-row">Σx = ${sumX.toFixed(2)}</div>
+                <div class="math-row">Σy = ${sumY.toFixed(2)}</div>
+                <div class="math-row">Σxy = ${sumXY.toFixed(2)}</div>
+                <div class="math-row">Σx² = ${sumXX.toFixed(2)}</div>
+            `;
+
+            slopeFormula.innerHTML = `
+                m = <span class="sub-text">(N·Σxy - Σx·Σy) / (N·Σx² - (Σx)²)</span><br>
+                m = (${n}·${sumXY.toFixed(1)} - ${sumX.toFixed(1)}·${sumY.toFixed(1)}) / ...<br>
+                m = <span class="highlight">${m.toFixed(4)}</span>
+            `;
+
+            interceptFormula.innerHTML = `
+                c = <span class="sub-text">(Σy - m·Σx) / N</span><br>
+                c = (${sumY.toFixed(1)} - ${m.toFixed(2)}·${sumX.toFixed(1)}) / ${n}<br>
+                c = <span class="highlight">${c.toFixed(4)}</span>
+            `;
+
+            // 4. Draw Canvas
             ctx.clearRect(0, 0, width, height);
 
-            // Draw Grid/Axes
-            ctx.strokeStyle = '#eee';
-            ctx.lineWidth = 1;
-            // (Simple grid logic omitted for brevity, just drawing border)
+            // Draw Axes
+            ctx.strokeStyle = '#ddd'; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(padding, height-padding); ctx.lineTo(width-padding, height-padding); ctx.stroke(); // X
+            ctx.beginPath(); ctx.moveTo(padding, height-padding); ctx.lineTo(padding, padding); ctx.stroke(); // Y
+
+            // Draw Regression Line (Convert graph units back to pixels)
+            // y = mx + c
+            const scale = width / 10; // Inverse of toGraphUnits
             
-            // Calculate Line
-            const { m, c } = calculateLeastSquares(points);
+            let x1_px = padding;
+            let x1_u = 0; // x in units roughly
+            // Actually, let's map pixel x to unit x, calculate unit y, map back to pixel y
+            // Simple approach: start at x=0 units, end at x=10 units
+            let yStart_u = m * 0 + c; 
+            let yEnd_u = m * 10 + c;
 
-            // Draw Regression Line
-            // y = mx + c -> We need two points at the edges of the canvas
-            let x1 = 0;
-            let y1_cartesian = m * x1 + c;
-            let y1 = height - y1_cartesian; // Convert back to canvas coords
+            // Map back to pixels
+            let yStart_px = height - (yStart_u / 10 * width); 
+            let yEnd_px = height - (yEnd_u / 10 * width);
 
-            let x2 = width;
-            let y2_cartesian = m * x2 + c;
-            let y2 = height - y2_cartesian;
-
+            // Clamp line drawing to graph area
             ctx.beginPath();
-            ctx.strokeStyle = '#ff4757'; // Red line
-            ctx.lineWidth = 3;
-            ctx.moveTo(x1, y1);
-            ctx.lineTo(x2, y2);
+            ctx.strokeStyle = '#ff4757'; ctx.lineWidth = 3;
+            ctx.moveTo(0, height - (c / 10 * width)); // x=0
+            ctx.lineTo(width, height - ((m*10 + c) / 10 * width)); // x=10
             ctx.stroke();
 
             // Draw Points
             points.forEach(p => {
                 ctx.beginPath();
-                ctx.fillStyle = '#3742fa'; // Blue points
-                ctx.arc(p.x, p.y, pointRadius, 0, Math.PI * 2);
+                ctx.fillStyle = '#3742fa';
+                ctx.arc(p.x, p.y, 6, 0, Math.PI * 2);
                 ctx.fill();
-                ctx.strokeStyle = 'white';
-                ctx.lineWidth = 2;
-                ctx.stroke();
             });
-
-            // Draw Residuals (Optional visual flair: lines from point to line)
-            ctx.strokeStyle = '#ccc';
-            ctx.lineWidth = 1;
-            ctx.setLineDash([5, 5]);
-            points.forEach(p => {
-                let lineY_cartesian = m * p.x + c;
-                let lineY = height - lineY_cartesian;
-                
-                ctx.beginPath();
-                ctx.moveTo(p.x, p.y);
-                ctx.lineTo(p.x, lineY);
-                ctx.stroke();
-            });
-            ctx.setLineDash([]);
-
-            // Update Text Stats
-            // Note: Coordinate system is pixels here, so numbers are large.
-            // In a real app, you'd map these to small units (e.g. 0 to 10).
-            statsOutput.innerText = `Line: y = ${(-m).toFixed(2)}x + ${c.toFixed(2)}`;
         }
 
-        // 4. Interaction Logic
+        // Interaction
         function getMousePos(evt) {
             const rect = canvas.getBoundingClientRect();
-            return {
-                x: evt.clientX - rect.left,
-                y: evt.clientY - rect.top
-            };
+            return { x: evt.clientX - rect.left, y: evt.clientY - rect.top };
         }
 
         canvas.addEventListener('mousedown', (e) => {
             const mouse = getMousePos(e);
-            // Check if we clicked a point
             points.forEach((p, index) => {
-                const dist = Math.hypot(mouse.x - p.x, mouse.y - p.y);
-                if (dist < pointRadius + 5) { // +5 for easier clicking
-                    isDragging = true;
-                    dragIndex = index;
+                if (Math.hypot(mouse.x - p.x, mouse.y - p.y) < 15) {
+                    isDragging = true; dragIndex = index;
                 }
             });
         });
@@ -180,29 +173,15 @@
         canvas.addEventListener('mousemove', (e) => {
             if (isDragging) {
                 const mouse = getMousePos(e);
-                // Update point position
                 points[dragIndex].x = mouse.x;
                 points[dragIndex].y = mouse.y;
-                draw(); // Redraw immediately
-            } else {
-                // Optional: Change cursor if hovering over a point
-                const mouse = getMousePos(e);
-                let hovering = false;
-                points.forEach(p => {
-                    if (Math.hypot(mouse.x - p.x, mouse.y - p.y) < pointRadius + 5) hovering = true;
-                });
-                canvas.style.cursor = hovering ? 'move' : 'default';
+                calculateAndDraw();
             }
         });
 
-        window.addEventListener('mouseup', () => {
-            isDragging = false;
-            dragIndex = -1;
-        });
-
-        // Initial draw
-        draw();
-
+        window.addEventListener('mouseup', () => { isDragging = false; });
+        
+        calculateAndDraw();
     </script>
 </body>
 </html>
