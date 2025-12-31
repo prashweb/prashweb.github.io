@@ -1,1 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RL: Traffic Control</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <h1>Epsilon-Greedy Traffic Light</h1>
+    <p>The agent learns to switch lights to minimize waiting cars.</p>
 
+    <div class="controls">
+        <label>Exploration (Epsilon): 
+            <input type="range" id="epsilonSlider" min="0" max="1" step="0.1" value="0.2">
+            <span id="epsValue">0.2</span>
+        </label>
+        <button onclick="toggleSim()">Play/Pause</button>
+        <div class="stat-box">Total Cars Passed: <span id="score">0</span></div>
+    </div>
+
+    <canvas id="simCanvas" width="600" height="300"></canvas>
+
+    <script src="script.js"></script>
+</body>
+</html>
