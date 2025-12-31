@@ -3,185 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Least Squares with Live Math</title>
+    <title>RL Concepts | Interactive Demos</title>
+    <link rel="stylesheet" href="css/style.css">
     <style>
-        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; background-color: #f8f9fa; color: #333; }
-        .container { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; max-width: 1200px; }
-        .canvas-box { background: white; padding: 10px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        canvas { border: 1px solid #ddd; cursor: crosshair; }
-        
-        /* Calculation Box Styling */
-        .math-box { 
-            background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
-            min-width: 300px; font-family: 'Courier New', monospace; font-size: 14px;
+        /* Landing Page Specific Styles */
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1000px;
+            width: 100%;
+            margin-top: 40px;
         }
-        .math-row { margin-bottom: 8px; border-bottom: 1px dashed #eee; padding-bottom: 4px; }
-        .highlight { color: #d63031; font-weight: bold; }
-        h3 { margin-top: 0; color: #2d3436; }
-        .sub-text { color: #636e72; font-size: 0.9em; }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border: 1px solid #eee;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.1);
+            border-color: #3742fa;
+        }
+
+        .card h3 { 
+            color: #2d3436; 
+            margin: 15px 0 10px 0; 
+            font-size: 1.2rem;
+        }
+
+        .card p { 
+            font-size: 0.95em; 
+            color: #636e72; 
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .icon { 
+            font-size: 48px; 
+            margin-bottom: 10px; 
+            background: #f1f2f6;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .tag {
+            margin-top: 15px;
+            background-color: #eef1f5;
+            color: #3742fa;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        header {
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        header p {
+            max-width: 600px;
+            margin: 10px auto;
+            color: #636e72;
+        }
     </style>
 </head>
 <body>
 
-    <h2>Interactive Least Squares</h2>
-    <p>Drag points to see how the sums and slope change instantly.</p>
+    <header>
+        <h1>Reinforcement Learning Playground</h1>
+        <p>Interactive simulations demonstrating core RL concepts for Intelligent Transportation Systems (ITS) and Robotics.</p>
+    </header>
 
-    <div class="container">
-        <div class="canvas-box">
-            <canvas id="plotCanvas" width="500" height="400"></canvas>
-        </div>
-        
-        <div class="math-box" id="calcPanel">
-            <h3>Live Calculations</h3>
-            <div id="sumsOutput"></div>
-            <br>
-            <h3>Slope (m)</h3>
-            <div id="slopeFormula"></div>
-            <br>
-            <h3>Intercept (c)</h3>
-            <div id="interceptFormula"></div>
-        </div>
+    <div class="demo-grid">
+        <a href="grid-world/index.html" class="card">
+            <div class="icon">💎</div>
+            <h3>Value Propagation</h3>
+            <p>Visualize how delayed rewards flow backward from a goal to the starting state using the Bellman Equation.</p>
+            <span class="tag">Foundation</span>
+        </a>
+
+        <a href="traffic-light/index.html" class="card">
+            <div class="icon">🚦</div>
+            <h3>Exploration vs. Exploitation</h3>
+            <p>A Q-Learning agent managing a traffic intersection. Learn the trade-off between trying new things and sticking to what works.</p>
+            <span class="tag">Q-Learning</span>
+        </a>
+
+        <a href="cliff-walker/index.html" class="card">
+            <div class="icon">⛰️</div>
+            <h3>Risk vs. Safety</h3>
+            <p>Compare an optimistic agent (Q-Learning) against a conservative agent (SARSA) in a high-stakes environment.</p>
+            <span class="tag">Safety</span>
+        </a>
+
+        <a href="parking/index.html" class="card">
+            <div class="icon">🅿️</div>
+            <h3>Reward Engineering</h3>
+            <p>Experiment with Sparse, Dense, and poorly designed reward functions to see how they impact learning speed.</p>
+            <span class="tag">Design</span>
+        </a>
     </div>
 
-    <script>
-        const canvas = document.getElementById('plotCanvas');
-        const ctx = canvas.getContext('2d');
-        const sumsOutput = document.getElementById('sumsOutput');
-        const slopeFormula = document.getElementById('slopeFormula');
-        const interceptFormula = document.getElementById('interceptFormula');
+    <footer style="margin-top: 60px; margin-bottom: 20px; font-size: 0.85em; color: #b2bec3;">
+        &copy; 2025 ITS Research Lab
+    </footer>
 
-        const width = canvas.width;
-        const height = canvas.height;
-        const padding = 40;
-
-        // Initialize points
-        let points = [];
-        for (let i = 0; i < 10; i++) {
-            points.push({
-                x: padding + (Math.random() * (width - 2 * padding)),
-                y: padding + (Math.random() * (height - 2 * padding))
-            });
-        }
-
-        let isDragging = false;
-        let dragIndex = -1;
-
-        // Scale down large pixel values to small graph units (0-10) for readability
-        function toGraphUnits(val, isY = false) {
-            // Map 0-500px to 0-10 units
-            const scale = 10 / width; 
-            if (isY) return ((height - val) * scale).toFixed(2);
-            return (val * scale).toFixed(2);
-        }
-
-        function calculateAndDraw() {
-            let n = points.length;
-            let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
-
-            // 1. Calculate Sums (using scaled units 0-10)
-            for (let p of points) {
-                let gx = parseFloat(toGraphUnits(p.x));
-                let gy = parseFloat(toGraphUnits(p.y, true));
-                
-                sumX += gx;
-                sumY += gy;
-                sumXY += gx * gy;
-                sumXX += gx * gx;
-            }
-
-            // 2. Calculate Slope/Intercept
-            let numerator = (n * sumXY) - (sumX * sumY);
-            let denominator = (n * sumXX) - (sumX * sumX);
-            let m = denominator === 0 ? 0 : numerator / denominator;
-            let c = (sumY - m * sumX) / n;
-
-            // 3. Update HTML Calculation Panel
-            sumsOutput.innerHTML = `
-                <div class="math-row">N (points) = ${n}</div>
-                <div class="math-row">Σx = ${sumX.toFixed(2)}</div>
-                <div class="math-row">Σy = ${sumY.toFixed(2)}</div>
-                <div class="math-row">Σxy = ${sumXY.toFixed(2)}</div>
-                <div class="math-row">Σx² = ${sumXX.toFixed(2)}</div>
-            `;
-
-            slopeFormula.innerHTML = `
-                m = <span class="sub-text">(N·Σxy - Σx·Σy) / (N·Σx² - (Σx)²)</span><br>
-                m = (${n}·${sumXY.toFixed(1)} - ${sumX.toFixed(1)}·${sumY.toFixed(1)}) / ...<br>
-                m = <span class="highlight">${m.toFixed(4)}</span>
-            `;
-
-            interceptFormula.innerHTML = `
-                c = <span class="sub-text">(Σy - m·Σx) / N</span><br>
-                c = (${sumY.toFixed(1)} - ${m.toFixed(2)}·${sumX.toFixed(1)}) / ${n}<br>
-                c = <span class="highlight">${c.toFixed(4)}</span>
-            `;
-
-            // 4. Draw Canvas
-            ctx.clearRect(0, 0, width, height);
-
-            // Draw Axes
-            ctx.strokeStyle = '#ddd'; ctx.lineWidth = 1;
-            ctx.beginPath(); ctx.moveTo(padding, height-padding); ctx.lineTo(width-padding, height-padding); ctx.stroke(); // X
-            ctx.beginPath(); ctx.moveTo(padding, height-padding); ctx.lineTo(padding, padding); ctx.stroke(); // Y
-
-            // Draw Regression Line (Convert graph units back to pixels)
-            // y = mx + c
-            const scale = width / 10; // Inverse of toGraphUnits
-            
-            let x1_px = padding;
-            let x1_u = 0; // x in units roughly
-            // Actually, let's map pixel x to unit x, calculate unit y, map back to pixel y
-            // Simple approach: start at x=0 units, end at x=10 units
-            let yStart_u = m * 0 + c; 
-            let yEnd_u = m * 10 + c;
-
-            // Map back to pixels
-            let yStart_px = height - (yStart_u / 10 * width); 
-            let yEnd_px = height - (yEnd_u / 10 * width);
-
-            // Clamp line drawing to graph area
-            ctx.beginPath();
-            ctx.strokeStyle = '#ff4757'; ctx.lineWidth = 3;
-            ctx.moveTo(0, height - (c / 10 * width)); // x=0
-            ctx.lineTo(width, height - ((m*10 + c) / 10 * width)); // x=10
-            ctx.stroke();
-
-            // Draw Points
-            points.forEach(p => {
-                ctx.beginPath();
-                ctx.fillStyle = '#3742fa';
-                ctx.arc(p.x, p.y, 6, 0, Math.PI * 2);
-                ctx.fill();
-            });
-        }
-
-        // Interaction
-        function getMousePos(evt) {
-            const rect = canvas.getBoundingClientRect();
-            return { x: evt.clientX - rect.left, y: evt.clientY - rect.top };
-        }
-
-        canvas.addEventListener('mousedown', (e) => {
-            const mouse = getMousePos(e);
-            points.forEach((p, index) => {
-                if (Math.hypot(mouse.x - p.x, mouse.y - p.y) < 15) {
-                    isDragging = true; dragIndex = index;
-                }
-            });
-        });
-
-        canvas.addEventListener('mousemove', (e) => {
-            if (isDragging) {
-                const mouse = getMousePos(e);
-                points[dragIndex].x = mouse.x;
-                points[dragIndex].y = mouse.y;
-                calculateAndDraw();
-            }
-        });
-
-        window.addEventListener('mouseup', () => { isDragging = false; });
-        
-        calculateAndDraw();
-    </script>
 </body>
 </html>
