@@ -7,20 +7,38 @@
 </head>
 <body>
     <h1>Cliff Walker: Risk vs. Reward</h1>
-    <p><strong>Q-Learning</strong> hugs the cliff (optimal but risky). <strong>SARSA</strong> takes the safe route.</p>
+    <p class="subtitle">Why "Optimal" isn't always "Safe": Q-Learning vs. SARSA.</p>
 
-    <div class="controls">
-        <label>Algorithm:
-            <select id="algoSelect">
-                <option value="qlearning">Q-Learning (Bold)</option>
-                <option value="sarsa">SARSA (Safe)</option>
-            </select>
-        </label>
-        <button onclick="resetSim()">Reset & Run</button>
-        <div class="stat-box">Episodes: <span id="episodes">0</span></div>
+    <div class="layout-wrapper">
+        <div class="visual-col">
+            <div class="controls">
+                <label>Algorithm:
+                    <select id="algoSelect">
+                        <option value="qlearning">Q-Learning (Bold)</option>
+                        <option value="sarsa">SARSA (Safe)</option>
+                    </select>
+                </label>
+                <button onclick="resetSim()">Reset & Run</button>
+                <div class="stat-box">Episodes: <span id="episodes">0</span></div>
+            </div>
+            <canvas id="cliffCanvas" width="600" height="250"></canvas>
+        </div>
+
+        <div class="text-col">
+            <h3>The Danger of Optimality</h3>
+            <p>
+                This classic problem highlights the difference between two famous algorithms. The agent (blue circle) must get from Start to Goal. The bottom row is a "Cliff" (huge penalty). The agent has a 10% chance of slipping (noise), meaning it might move down even if it tries to move right.
+            </p>
+            <p>
+                <strong>Q-Learning (Off-Policy):</strong><br>
+                This algorithm assumes it will act optimally in the future. It finds the mathematically shortest path: walking right along the edge of the cliff. However, because of the 10% slip chance, it frequently falls off. It is "optimistic" but risky.
+            </p>
+            <p>
+                <strong>SARSA (On-Policy):</strong><br>
+                This algorithm learns from the policy it is <em>actually</em> using, including the exploration slips. It realizes that walking near the edge is dangerous because a slip leads to death. Consequently, it learns a "safe" path through the middle of the room. It takes longer to reach the goal, but it rarely crashes.
+            </p>
+        </div>
     </div>
-
-    <canvas id="cliffCanvas" width="600" height="250"></canvas>
 
     <script src="script.js"></script>
 </body>
