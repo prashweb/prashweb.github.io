@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RL: Reward Engineering</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <h1>Reward Engineering: The Parking Problem</h1>
+    <p>Select a reward function to see how it changes the agent's behavior.</p>
+
+    <div class="controls">
+        <form id="rewardForm">
+            <label><input type="radio" name="reward" value="sparse" checked> <strong>Sparse:</strong> +100 only at goal (Hard)</label><br>
+            <label><input type="radio" name="reward" value="dense"> <strong>Dense:</strong> +1 for getting closer (Easy)</label><br>
+            <label><input type="radio" name="reward" value="bad"> <strong>Bad:</strong> +1 for every move (Infinite Loop)</label>
+        </form>
+        <button onclick="resetGrid()">Reset</button>
+    </div>
+
+    <canvas id="parkCanvas" width="400" height="400"></canvas>
+    <script src="script.js"></script>
+</body>
+</html>
